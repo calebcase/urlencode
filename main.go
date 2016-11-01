@@ -1,16 +1,23 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
-	"net/url"
 	"os"
+	"regexp"
 )
 
-func main() {
-	u, err := url.Parse(os.Args[1])
-	if err != nil {
-		os.Exit(1)
-	}
+var isChar = regexp.MustCompile(`^[a-zA-Z]+$`)
 
-	fmt.Println(u.String())
+func main() {
+	for _, r := range os.Args[1] {
+		c := string(r)
+		if !isChar.MatchString(c) {
+			s := hex.EncodeToString([]byte(c))
+			fmt.Printf("%%%s", s)
+		} else {
+			fmt.Print(c)
+		}
+	}
+	fmt.Print("\n")
 }
